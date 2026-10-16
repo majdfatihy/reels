@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>صانع الشورتس</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0e1013;--panel:#161a20;--line:#262c35;--text:#e9e7e2;--mute:#8b94a1;--gold:#ffd24a;--bad:#ff7a6b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.7 Tajawal,Tahoma,sans-serif}
+main{max-width:920px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:34px;font-weight:800;margin:0 0 4px}
+h1 span{color:var(--gold)}
+p.sub{margin:0 0 26px;color:var(--mute)}
+section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+h2{font-size:18px;margin:0 0 12px}
+label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
+.row{display:grid;grid-template-columns:1fr auto;gap:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+select,input[type=password],input[type=text],input[type=number]{width:100%;padding:10px 12px;background:#0f1216;color:var(--text);border:1px solid var(--line);border-radius:8px;font:inherit}
+textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:#1d222a;color:var(--text);padding:10px 14px}
+button.main{background:var(--gold);color:#17130a;border:0;font-weight:800;width:100%;padding:13px;margin-top:14px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.remember{display:flex;gap:8px;align-items:center;margin-top:12px;color:var(--mute);font-size:14px}
+#drop{border:2px dashed var(--line);border-radius:12px;padding:34px 12px;text-align:center;color:var(--mute);cursor:pointer}
+#drop.over,#drop.has{border-color:var(--gold);color:var(--text)}
+.bar{height:8px;background:#0f1216;border-radius:6px;overflow:hidden;margin:10px 0 6px}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .4s}
+#err{color:var(--bad);white-space:pre-wrap}
+#res{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:#0f1216;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.card video{width:100%;aspect-ratio:9/16;background:#000;display:block}
+.card .body{padding:12px}
+.card h3{margin:0 0 2px;font-size:16px}
+.hook{color:var(--gold);font-weight:500;font-size:14px}
+.card small{color:var(--mute);display:block;margin-top:6px}
+.card a{display:inline-block;margin-top:8px;color:#17130a;background:var(--gold);padding:6px 12px;border-radius:7px;text-decoration:none;font-weight:700}
+textarea{width:100%;padding:10px 12px;background:#0f1216;color:var(--text);border:1px solid var(--line);border-radius:8px;font:inherit;resize:vertical}
+.media{position:relative;aspect-ratio:9/16;background:#000;cursor:pointer}
+.media img{width:100%;height:100%;object-fit:cover;display:block}
+.media video{width:100%;height:100%;object-fit:contain;display:block;background:#000}
+video:fullscreen{object-fit:contain;background:#000}
+video:-webkit-full-screen{object-fit:contain;background:#000}
+.play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(14,16,19,.75);border:2px solid var(--gold);color:var(--gold);font-size:22px;padding:0;pointer-events:none}
+.acts{display:flex;gap:8px;margin-top:8px;align-items:center}
+.acts button,.acts a{margin:0}
+.save{background:var(--gold);color:#17130a;border:0;font-weight:800;margin-top:10px}
+.pbtn{display:block;width:100%;text-align:right;margin-bottom:8px}
+.st{color:var(--mute);font-size:14px;margin-inline-start:8px}
+.hide{display:none}
+@media(max-width:560px){.grid3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+  <h1>صانع <span>الشورتس</span></h1>
+  <p class="sub">ارفع فيديو طويلاً، وسيقصّه البرنامج لمقاطع عمودية بهوك وكابشنز متحركة.</p>
+
+  <section>
+    <h2>مفاتيح الـ API</h2>
+    <label for="k1">AssemblyAI (التفريغ النصي)</label>
+    <div class="row"><input id="k1" type="password" autocomplete="off" placeholder="ضع المفتاح هنا"><button type="button" data-eye="k1">إظهار</button></div>
+    <label for="k2">Gemini (اختيار المقاطع والهوك)</label>
+    <div class="row"><input id="k2" type="password" autocomplete="off" placeholder="ضع المفتاح هنا"><button type="button" data-eye="k2">إظهار</button></div>
+    <label for="k3">Groq (العناوين والوصف)</label>
+    <div class="row"><input id="k3" type="password" autocomplete="off" placeholder="ضع المفتاح هنا"><button type="button" data-eye="k3">إظهار</button></div>
+    <label for="k4">موديل Gemini (اختياري، الفراغ = اختيار تلقائي)</label>
+    <input id="k4" type="text" dir="ltr" placeholder="gemini-3.8-flash">
+    <label class="remember"><input id="rem" type="checkbox"> تذكّر المفاتيح في هذا المتصفح</label>
+  </section>
+
+  <section>
+    <h2>الفيديو والإعدادات</h2>
+    <div id="drop" tabindex="0" role="button">اسحب الفيديو هنا أو اضغط للاختيار</div>
+    <input id="file" type="file" accept="video/*" class="hide">
+    <label for="yt">أو الصق رابط يوتيوب</label>
+    <input id="yt" type="text" dir="ltr" placeholder="https://www.youtube.com/watch?v=...">
+    <div class="grid3">
+      <div><label for="n">عدد الشورتس</label><input id="n" type="number" min="1" max="15" value="5"></div>
+      <div><label for="lo">أقل مدة (ث)</label><input id="lo" type="number" min="10" value="25"></div>
+      <div><label for="hi">أقصى مدة (ث)</label><input id="hi" type="number" max="180" value="60"></div>
+    </div>
+    <label for="font">خط الكابشنز (مثبّت على جهازك)</label>
+    <input id="font" type="text" value="Arial">
+    <button id="go" class="main" type="button">ابدأ إنشاء الشورتس</button>
+  </section>
+
+  <section>
+    <h2>المؤثرات</h2>
+    <div class="grid3">
+      <div><label for="cap">نمط الكابشنز</label><select id="cap"></select></div>
+      <div><label for="zoom">حركة الكاميرا</label>
+        <select id="zoom"><option value="slow">تقريب بطيء</option><option value="pulse">نبض خفيف</option><option value="">بدون</option></select></div>
+      <div><label for="trans">الانتقال</label>
+        <select id="trans"><option value="fade">تلاشي</option><option value="flash">وميض أبيض</option><option value="">بدون</option></select></div>
+      <div><label for="sfxs">مؤثر بداية الشورت</label><select id="sfxs"></select></div>
+      <div><label for="sfxc">نقرة عند كل مقطع كابشن</label><select id="sfxc"></select></div>
+      <div><label for="mus">موسيقى خلفية</label><select id="mus"></select></div>
+    </div>
+    <label class="remember"><input id="afx" type="checkbox" checked> المخرج الذكي: تأثيرات حركة وأصوات تلقائية يقرّرها Gemini</label>
+    <label for="cut">حذف الصمت والحشو</label>
+    <select id="cut"><option value="0.7">خفيف</option><option value="0.45" selected>متوسط</option><option value="0.3">قوي</option><option value="0">إيقاف</option></select>
+    <label class="remember"><input id="trk" type="checkbox" checked> تتبّع الوجه عند القص العمودي</label>
+    <label for="mv">مستوى الموسيقى</label>
+    <input id="mv" type="range" min="0.03" max="0.4" step="0.01" value="0.12" style="width:100%">
+    <p class="sub" style="margin:10px 0 0;font-size:14px">لإضافة مؤثراتك أو موسيقاك: ضع الملفات (mp3 أو wav) في مجلد <b>sfx</b> أو <b>music</b> بجانب server.py، ثم حدّث الصفحة.</p>
+  </section>
+
+  <section id="proj" class="hide">
+    <h2>المشاريع المحفوظة (حفظ تلقائي)</h2>
+    <div id="plist"></div>
+  </section>
+
+  <section id="prog" class="hide">
+    <h2 id="step">...</h2>
+    <div class="bar"><i id="fill"></i></div>
+    <div id="err"></div>
+  </section>
+
+  <section id="out" class="hide">
+    <h2>الشورتس الجاهزة</h2>
+    <div id="res"></div>
+  </section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const K=[['k1','ak'],['k2','gk'],['k3','qk'],['k4','mk']];
+let file=null,curId=null;
+
+async function loadAssets(){
+  try{
+    const a=await (await fetch('/api/assets')).json();
+    const cap=$('cap');cap.textContent='';
+    Object.entries(a.caps).forEach(([k,l])=>cap.add(new Option(l,k)));
+    [['sfxs',a.sfx,'بدون'],['sfxc',a.sfx,'بدون'],['mus',a.music,'بدون موسيقى']].forEach(([id,items,none])=>{
+      const s=$(id);s.textContent='';s.add(new Option(none,''));
+      items.forEach(n=>s.add(new Option(n,n)));
+    });
+  }catch(e){}
+}
+loadAssets();
+
+// تحميل المفاتيح المحفوظة
+try{if(localStorage.getItem('rem')==='1'){$('rem').checked=true;K.forEach(([i,s])=>$(i).value=localStorage.getItem(s)||'')}}catch(e){}
+function save(){try{
+  localStorage.setItem('rem',$('rem').checked?'1':'0');
+  K.forEach(([i,s])=>$('rem').checked?localStorage.setItem(s,$(i).value):localStorage.removeItem(s));
+}catch(e){}}
+
+document.querySelectorAll('[data-eye]').forEach(b=>b.onclick=()=>{
+  const el=$(b.dataset.eye),show=el.type==='password';
+  el.type=show?'text':'password';b.textContent=show?'إخفاء':'إظهار';
+});
+
+const drop=$('drop');
+function setFile(f){if(!f)return;file=f;drop.classList.add('has');drop.textContent=f.name+' ('+(f.size/1048576).toFixed(0)+' MB)'}
+drop.onclick=()=>$('file').click();
+drop.onkeydown=e=>{if(e.key==='Enter')$('file').click()};
+$('file').onchange=e=>setFile(e.target.files[0]);
+drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};
+drop.ondragleave=()=>drop.classList.remove('over');
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');setFile(e.dataTransfer.files[0])};
+
+function fail(m){$('err').textContent=m;$('go').disabled=false}
+
+$('go').onclick=async()=>{
+  $('err').textContent='';
+  if(!file&&!$('yt').value.trim())return alert('اختر فيديو أو الصق رابطاً');
+  if(!$('k1').value||!$('k2').value)return alert('مفتاح AssemblyAI ومفتاح Gemini مطلوبان');
+  save();
+  const fd=new FormData();
+  if(file)fd.append('video',file);fd.append('url',$('yt').value.trim());
+  fd.append('assembly_key',$('k1').value.trim());
+  fd.append('gemini_key',$('k2').value.trim());
+  fd.append('groq_key',$('k3').value.trim());fd.append('gemini_model',$('k4').value.trim());
+  fd.append('clips',$('n').value);fd.append('min_s',$('lo').value);fd.append('max_s',$('hi').value);
+  fd.append('font',$('font').value||'Arial');
+  fd.append('cap',$('cap').value);fd.append('zoom',$('zoom').value);fd.append('trans',$('trans').value);
+  fd.append('sfx_start',$('sfxs').value);fd.append('sfx_chunk',$('sfxc').value);
+  fd.append('music',$('mus').value);fd.append('music_vol',$('mv').value);fd.append('track',$('trk').checked?'1':'0');fd.append('cut',$('cut').value);fd.append('auto_fx',$('afx').checked?'1':'0');
+  $('go').disabled=true;$('prog').classList.remove('hide');$('out').classList.add('hide');
+  $('step').textContent='جارٍ رفع الفيديو إلى السيرفر المحلي';$('fill').style.width='2%';
+  try{
+    const r=await fetch('/api/jobs',{method:'POST',body:fd});
+    if(!r.ok)throw new Error('تعذّر بدء المعالجة');
+    poll((await r.json()).id);
+  }catch(e){fail(e.message)}
+};
+
+async function poll(id){
+  try{
+    const j=await (await fetch('/api/jobs/'+id)).json();
+    $('step').textContent=j.step;$('fill').style.width=j.progress+'%';
+    if(j.status==='error')return fail('حدث خطأ:\n'+j.error);
+    if(j.status==='done'){$('go').disabled=false;curId=id;loadProjects();return show(j.clips)}
+  }catch(e){}
+  setTimeout(()=>poll(id),2500);
+}
+
+function show(clips){
+  const res=$('res');res.textContent='';
+  if(!clips.length){res.textContent='لم يجد النموذج مقاطع مناسبة.'}
+  clips.forEach(c=>res.append(card(c)));
+  $('out').classList.remove('hide');
+}
+
+function card(c){
+  const jid=curId;
+  const bust=u=>c.v?u+'?v='+c.v:u;
+  const d=document.createElement('div');d.className='card';
+  const m=document.createElement('div');m.className='media';
+  const img=document.createElement('img');img.src=bust(c.thumb||'');img.alt='';img.loading='lazy';
+  const pl=document.createElement('button');pl.type='button';pl.className='play';pl.textContent='▶';
+  m.append(img,pl);
+  m.onclick=()=>{const v=document.createElement('video');v.src=bust(c.url);v.controls=true;v.autoplay=true;v.playsInline=true;m.replaceChildren(v);m.onclick=null};
+  const b=document.createElement('div');b.className='body';
+  const h=document.createElement('h3');h.textContent=c.title;
+  const k=document.createElement('div');k.className='hook';k.textContent=c.hook;
+  const s=document.createElement('small');
+  s.textContent=(c.description||'')+' '+(c.hashtags||[]).map(x=>'#'+String(x).replace(/^#/,'')).join(' ');
+  const acts=document.createElement('div');acts.className='acts';
+  const a=document.createElement('a');a.href=bust(c.url);a.download='short.mp4';a.textContent='تحميل';
+  const eb=document.createElement('button');eb.type='button';eb.textContent='تحرير الكابشنز';
+  acts.append(a,eb);
+  const ed=document.createElement('div');ed.className='edit hide';
+  const mk=(lab,el)=>{const l=document.createElement('label');l.textContent=lab;ed.append(l,el);return el};
+  const ih=document.createElement('input');ih.type='text';ih.value=c.hook;mk('الهوك',ih);
+  const it=document.createElement('input');it.type='text';it.value=c.title;mk('العنوان',it);
+  const ta=document.createElement('textarea');ta.rows=6;ta.dir='auto';ta.value=c.caption||'';mk('نص الكابشنز (صحّح الأخطاء الإملائية كما تشاء)',ta);
+  const sv=document.createElement('button');sv.type='button';sv.className='save';sv.textContent='حفظ وإعادة التصيير';
+  const st=document.createElement('span');st.className='st';
+  ed.append(sv,st);
+  eb.onclick=()=>ed.classList.toggle('hide');
+  sv.onclick=async()=>{
+    sv.disabled=true;st.textContent='جارٍ إعادة التصيير، قد يستغرق دقيقة...';
+    try{
+      const r=await fetch('/api/jobs/'+jid+'/clips/'+c.i+'/edit',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({caption:ta.value,hook:ih.value,title:it.value})});
+      if(!r.ok)throw new Error('فشل الحفظ أو إعادة التصيير');
+      Object.assign(c,await r.json());d.replaceWith(card(c));
+    }catch(e){st.textContent=e.message;sv.disabled=false}
+  };
+  b.append(h,k,s,acts,ed);d.append(m,b);return d;
+}
+
+async function loadProjects(){
+  try{
+    const l=await (await fetch('/api/projects')).json();
+    const box=$('plist');box.textContent='';
+    $('proj').classList.toggle('hide',!l.length);
+    l.forEach(p=>{
+      const b=document.createElement('button');b.type='button';b.className='pbtn';
+      b.textContent=(p.name||p.id)+' · '+p.count+' شورتس · '+p.created;
+      b.onclick=async()=>{
+        const j=await (await fetch('/api/jobs/'+p.id)).json();
+        curId=p.id;show(j.clips);$('out').scrollIntoView({behavior:'smooth'});
+      };
+      box.append(b);
+    });
+  }catch(e){}
+}
+loadProjects();
+</script>
+</body>
+</html>

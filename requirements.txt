@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+python-multipart
+requests
+opencv-python-headless
+yt-dlp
