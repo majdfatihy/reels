@@ -2,5 +2,5 @@ fastapi
 uvicorn[standard]
 python-multipart
 requests
-opencv-python-headless
-yt-dlp
+opencv-python-headless<5
+yt-dlp[default]
